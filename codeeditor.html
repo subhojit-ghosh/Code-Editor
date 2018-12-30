@@ -1,0 +1,216 @@
+<html>
+
+    <head>
+    
+        <title>Code Editor</title>
+        
+        <script src="jquery-main.js" type="text/javascript"></script>
+       
+        
+        
+        
+        <style type="text/css">
+            
+            body {
+                
+                padding: 0;
+                margin: 0;
+            }
+        
+            #header {
+                
+                background-color: rgb(166,194,249);
+                padding: 6px;
+                height: 34px;
+            }
+            
+            #logo {
+                
+                float: left;
+                margin-top: 6px;
+                margin-left: 2px;
+                font-size: 140%;
+                font-weight: bold;
+            }
+            
+            #buttonContainer {
+                
+                width: 300px;
+                margin: 0 auto;
+            }
+            
+            .button {
+                
+                float: left;
+                border: 2px solid grey;
+                padding: 7px;
+                border-right: none;
+                
+                cursor:default;
+                font-weight: bold;
+                color:black;
+            }
+            
+            #html {
+                
+                border-bottom-left-radius: 6px;
+                border-top-left-radius: 6px;
+            }
+            
+            #output {
+                
+                border-right: 1px solid grey;
+                border-bottom-right-radius: 6px;
+                border-top-right-radius: 6px;
+            }
+            
+            .active {
+                
+                background-color:cornflowerblue;
+            }
+            
+            .hidden {
+                
+                display: none;
+            }
+            
+            .hilighted {
+                
+                background-color:aquamarine;
+            }
+            
+            textarea {
+                
+                
+                resize: none;
+                border-top: none;
+                background-color:cornsilk;
+                border-bottom: none;
+                padding: 6px;
+            }
+            
+            .panel {
+                
+                float: left;
+                border-left: none;
+                
+            }
+            
+            iframe {
+                
+                border: none;
+                
+                padding: 6px;
+                
+            }
+            
+            #creator {
+                
+                text-align: right;
+                float: right;
+                margin-top: 15px;
+                margin-right: 20px;
+            }
+        
+        </style>
+    
+    </head>
+    
+    <body>
+        
+        <div id="header">
+        
+            <div id="logo">
+            
+                < Code Editor />
+                
+                
+            
+            </div>
+            
+            <div id="buttonContainer">
+            
+                <div class="button" id="html">HTML</div>
+                
+                <div class="button" id="css">CSS</div>
+                
+                <div class="button" id="javascript">JavaScript</div>
+                
+                <div class="button" id="output">Output</div>
+            
+            </div>
+            
+            <span id="creator">By: Subhojit Ghosh</span>
+        
+        </div>
+        
+        <div id="bodyContainer">
+        
+            <textarea id="htmlPanel" class="panel hidden"><p id="para">Hello World!</p></textarea>
+            
+            <textarea id="cssPanel" class="panel hidden">p { color: green; }</textarea>
+            
+            <textarea id="javascriptPanel" class="panel hidden">document.getElementById("para").innerHTML = "Good bye!";</textarea>
+            
+            <iframe id="outputPanel" class="panel hidden"></iframe>
+        
+        </div>
+        
+        
+    
+        <script type="text/javascript">
+            
+            function updateOutput() {
+              
+                $("iframe").contents().find("html").html("<html><head><style type='text/css'>" + $("#cssPanel").val() + "</style></head><body>" +  $("#htmlPanel").val()+"</body></html>");
+                
+                document.getElementById("outputPanel").contentWindow.eval($("#javascriptPanel").val());
+                
+                
+                
+            };
+        
+            $(".button").hover(function() {
+                
+                $(this).addClass("hilighted");
+            }, function() {
+                
+                $(this).removeClass("hilighted");
+            });
+            
+            
+            
+            $(".button").click(function() {
+                
+                $(this).toggleClass("active");
+                
+                $(this).removeClass("hilighted");
+                
+                var panelId = $(this).attr("id") + "Panel";
+            
+                $("#"+panelId).toggleClass("hidden");
+                
+                var numberOfActivePanels = 4 - $(".hidden").length;
+                
+                $(".panel").width(($(window).width()/numberOfActivePanels)-13);
+            });
+            
+            $(".panel").height($(window).height() - $("#header").height() - 25);
+            
+            
+            
+            updateOutput();
+            
+            $("textarea").on("change keyup paste", function() {
+                
+                updateOutput();
+            });
+            
+            $("textarea").linedtextarea();
+            
+            
+        
+        </script>
+        
+    </body>
+</html>
